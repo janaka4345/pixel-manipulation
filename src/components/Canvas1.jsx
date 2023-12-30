@@ -12,11 +12,11 @@ export default function Canvas(props) {
   useMemo(() => {
     for (let i = 0; i < numOfParticles; i++) {
       particleArray.push({
-        x: Math.floor(Math.random() * cw),
-        y: Math.floor(Math.random() * ch),
+        x: Math.random() * cw,
+        y: Math.random() * ch,
         speed: 0,
-        velocity: Math.random() * 3.5,
-        velocity: 1,
+        velocity: 2,
+        // velocity: 1,
         size: 10,
       });
     }
@@ -57,7 +57,7 @@ function draw(p5) {
     p5.background(0, 0, 0);
     p5.image(img, 0, 0);
     particleArray.forEach((particle) => {
-      const index = (particle.x + particle.y * cw) * 4;
+      const index = Math.floor(particle.x + particle.y * cw) * 4;
       const r = graphic.pixels[index + 0];
       const g = graphic.pixels[index + 1];
       const b = graphic.pixels[index + 2];
