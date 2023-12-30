@@ -5,18 +5,18 @@ let graphic;
 let cw = 400;
 let ch = 400;
 let particleArray = [];
-let numOfParticles = 100;
+let numOfParticles = 400;
 
 export default function Canvas2(props) {
   const [t, setT] = useState(0);
   useMemo(() => {
     for (let i = 0; i < numOfParticles; i++) {
       particleArray.push({
-        x: Math.floor(Math.random() * cw),
+        x: i,
         y: Math.floor(Math.random() * ch),
         speed: 0,
-        velocity: Math.floor(Math.random() + 1) * 5,
-        size: 5,
+        velocity: 1,
+        size: 1,
       });
     }
   }, []);
@@ -69,11 +69,11 @@ function draw(p5) {
       particle.y += particle.velocity;
       if (particle.y > ch) {
         particle.y = 0;
-        particle.x = Math.floor(Math.random() * cw);
+        // particle.x = Math.floor(Math.random() * cw);
       }
     });
 
-    p5.frameCount > 500 ? p5.noLoop() : null;
+    // p5.frameCount > 500 ? p5.noLoop() : null;
   };
 }
 function mousePressed(p5) {
