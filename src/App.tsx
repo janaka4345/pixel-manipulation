@@ -1,5 +1,5 @@
 import "./App.css";
-import Canvas from "./components/Canvas";//image seperarttd to grid without pixels
+import Canvas from "./components/Canvas";//image  pixels
 function App(){
   return (
     <>

@@ -1,19 +1,38 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { ReactP5Wrapper } from "@p5-wrapper/react";
 let img;
-
+let graphic;
 let cw = 400;
 let ch = 400;
-let cellSize = 20;
-let rows = cw / cellSize;
-let cols = ch / cellSize;
-let cells = [];
+let particleArray = [];
+let numOfParticles = 100;
+
 export default function Canvas(props) {
+  const [t, setT] = useState(0);
+  useMemo(() => {
+    console.log("memo ran 1");
+    // for (let y = 0; y < ch; y++) {
+    //   for (let x = 0; x < cw; x++) {
+
+    //   }
+    // }
+    for (let i = 0; i < numOfParticles; i++) {
+      particleArray.push({
+        x: Math.random() * cw,
+        y: 0,
+        speed: 0,
+        velocity: Math.random() * 3.5,
+        size: Math.random() * 10 + 5,
+      });
+    }
+  }, []);
   return (
     <div>
       <div>
         <ReactP5Wrapper sketch={sketch} />
       </div>
+      <button onClick={() => setT((prev) => (prev += 1))}>click</button>
+      <h1>{t}</h1>
     </div>
   );
 }
@@ -26,18 +45,11 @@ function sketch(p5) {
 }
 function setup(p5) {
   return () => {
+    console.log("setup ran");
     p5.createCanvas(cw, ch, { willReadFrequently: true });
-
-    p5.background(0);
-
-    for (let y = 0; y < rows; y++) {
-      for (let x = 0; x < cols; x++) {
-        cells.push({
-          x: x * cellSize,
-          y: y * cellSize,
-        });
-      }
-    }
+    graphic = p5.createGraphics(img.width, img.height);
+    graphic.image(img, 0, 0);
+    graphic.loadPixels();
   };
 }
 function preload(p5) {
@@ -45,23 +57,18 @@ function preload(p5) {
 }
 function draw(p5) {
   return () => {
-    cells.forEach((cell, i) => {
-      const x = Math.floor(cell.x / cellSize);
-      const y = Math.floor(cell.y / cellSize);
+    p5.background(0);
+    particleArray.forEach((particle) => {
       p5.push();
-
-      p5.image(
-        img,
-        cell.x,
-        cell.y,
-        cellSize,
-        cellSize,
-        x * cellSize,
-        y * cols,
-        cellSize,
-        cellSize
-      );
+      p5.fill(255, 0, 0);
+      p5.circle(particle.x, particle.y, particle.size);
+      p5.pop();
+      particle.y > ch ? (particle.y = 0) : (particle.y += particle.velocity);
+      // particle.x = Math.random() * cw;
     });
   };
 }
-function mousePressed(p5) {}
+function mousePressed(p5) {
+  // console.log(graphic.pixels);
+  console.log(p5.frameRate());
+}
