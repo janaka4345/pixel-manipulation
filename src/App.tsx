@@ -4,11 +4,13 @@ import "./App.css";
 */
 import Canvas from "./components/Canvas";//image  pixels -pixel rain-blue print
 import Canvas1 from "./components/Canvas1";//image  pixels -pixel rain-blue print
+import Canvas2 from "./components/Canvas2";
 function App(){
   return (
     <>
        {/* <Canvas />   */}
-       <Canvas1/>
+       {/* <Canvas1/> */}
+       <Canvas2/>
       
     </>
   );

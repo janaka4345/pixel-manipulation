@@ -5,9 +5,9 @@ let graphic;
 let cw = 400;
 let ch = 400;
 let particleArray = [];
-let numOfParticles = 5000;
+let numOfParticles = 100;
 
-export default function Canvas1(props) {
+export default function Canvas2(props) {
   const [t, setT] = useState(0);
   useMemo(() => {
     for (let i = 0; i < numOfParticles; i++) {
@@ -15,7 +15,7 @@ export default function Canvas1(props) {
         x: Math.floor(Math.random() * cw),
         y: Math.floor(Math.random() * ch),
         speed: 0,
-        velocity: Math.floor(Math.random() + 1),
+        velocity: Math.floor(Math.random() + 1) * 5,
         size: 5,
       });
     }
@@ -45,6 +45,7 @@ function setup(p5) {
     graphic = p5.createGraphics(cw, ch);
     graphic.image(img, 0, 0, cw, ch, 0, 0, cw, ch);
     graphic.loadPixels();
+    p5.background(255);
   };
 }
 function preload(p5) {
@@ -52,7 +53,6 @@ function preload(p5) {
 }
 function draw(p5) {
   return () => {
-    p5.background(0, 0, 0);
     // p5.image(img, 0, 0);
     particleArray.forEach((particle) => {
       const index = (particle.x + particle.y * cw) * 4;
@@ -63,8 +63,8 @@ function draw(p5) {
 
       p5.push();
       p5.fill(r, g, b, a);
-
-      p5.circle(particle.x, particle.y, particle.size);
+      p5.noStroke();
+      p5.square(particle.x, particle.y, particle.size);
       p5.pop();
       particle.y += particle.velocity;
       if (particle.y > ch) {
@@ -73,7 +73,7 @@ function draw(p5) {
       }
     });
 
-    // p5.noLoop();
+    p5.frameCount > 500 ? p5.noLoop() : null;
   };
 }
 function mousePressed(p5) {
