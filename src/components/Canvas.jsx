@@ -5,27 +5,24 @@ let graphic;
 let cw = 400;
 let ch = 400;
 let particleArray = [];
-let numOfParticles = 100;
+let numOfParticles = 10;
+let test = [];
 
 export default function Canvas(props) {
   const [t, setT] = useState(0);
   useMemo(() => {
-    console.log("memo ran 1");
-    // for (let y = 0; y < ch; y++) {
-    //   for (let x = 0; x < cw; x++) {
-
-    //   }
-    // }
     for (let i = 0; i < numOfParticles; i++) {
       particleArray.push({
-        x: Math.random() * cw,
-        y: 0,
+        x: Math.floor(Math.random() * cw),
+        y: Math.floor(Math.random() * ch),
         speed: 0,
         velocity: Math.random() * 3.5,
-        size: Math.random() * 10 + 5,
+        velocity: 1,
+        size: 10,
       });
     }
   }, []);
+
   return (
     <div>
       <div>
@@ -46,32 +43,44 @@ function sketch(p5) {
 function setup(p5) {
   return () => {
     console.log("setup ran");
+    p5.pixelDensity(1);
     p5.createCanvas(cw, ch, { willReadFrequently: true });
-    graphic = p5.createGraphics(img.width, img.height);
-    graphic.image(img, 0, 0);
+    graphic = p5.createGraphics(cw, ch);
+    graphic.image(img, 0, 0, cw, ch, 0, 0, cw, ch);
     graphic.loadPixels();
   };
 }
 function preload(p5) {
-  img = p5.loadImage("./face.jpg");
+  img = p5.loadImage("./colorgrid.png");
 }
 function draw(p5) {
   return () => {
-    p5.background(0);
+    p5.background(0, 0, 0);
+    p5.image(img, 0, 0);
     particleArray.forEach((particle) => {
+      const index = (particle.x + particle.y * cw) * 4;
+      const r = graphic.pixels[index + 0];
+      const g = graphic.pixels[index + 1];
+      const b = graphic.pixels[index + 2];
+      const a = graphic.pixels[index + 3];
+
       p5.push();
-      p5.fill(255, 0, 0);
+      p5.fill(r, g, b, a);
+      p5.stroke(255);
+      p5.strokeWeight(2);
       p5.circle(particle.x, particle.y, particle.size);
       p5.pop();
       particle.y += particle.velocity;
       if (particle.y > ch) {
         particle.y = 0;
-        particle.x = Math.random() * cw;
+        particle.x = Math.floor(Math.random() * cw);
       }
     });
+
+    // p5.noLoop();
   };
 }
 function mousePressed(p5) {
-  // console.log(graphic.pixels);
+  // console.log(particleArray);
   console.log(p5.frameRate());
 }
