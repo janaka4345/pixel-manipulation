@@ -7,8 +7,8 @@ import Canvas1 from "./components/Canvas1";//image  pixels -pixel rain-blue prin
 function App(){
   return (
     <>
-       <Canvas />  
-       {/* <Canvas1/> */}
+       {/* <Canvas />   */}
+       <Canvas1/>
       
     </>
   );

@@ -5,19 +5,18 @@ let graphic;
 let cw = 400;
 let ch = 400;
 let particleArray = [];
-let numOfParticles = 10;
+let numOfParticles = 5000;
 
 export default function Canvas(props) {
   const [t, setT] = useState(0);
   useMemo(() => {
     for (let i = 0; i < numOfParticles; i++) {
       particleArray.push({
-        x: Math.random() * cw,
-        y: Math.random() * ch,
+        x: Math.floor(Math.random() * cw),
+        y: Math.floor(Math.random() * ch),
         speed: 0,
-        velocity: 2,
-        // velocity: 1,
-        size: 10,
+        velocity: Math.floor(Math.random() + 1),
+        size: 5,
       });
     }
   }, []);
@@ -41,7 +40,6 @@ function sketch(p5) {
 }
 function setup(p5) {
   return () => {
-    console.log("setup ran");
     p5.pixelDensity(1);
     p5.createCanvas(cw, ch, { willReadFrequently: true });
     graphic = p5.createGraphics(cw, ch);
@@ -50,14 +48,14 @@ function setup(p5) {
   };
 }
 function preload(p5) {
-  img = p5.loadImage("./colorgrid.png");
+  img = p5.loadImage("./elephant.jpg");
 }
 function draw(p5) {
   return () => {
     p5.background(0, 0, 0);
-    p5.image(img, 0, 0);
+    // p5.image(img, 0, 0);
     particleArray.forEach((particle) => {
-      const index = Math.floor(particle.x + particle.y * cw) * 4;
+      const index = (particle.x + particle.y * cw) * 4;
       const r = graphic.pixels[index + 0];
       const g = graphic.pixels[index + 1];
       const b = graphic.pixels[index + 2];
@@ -65,8 +63,7 @@ function draw(p5) {
 
       p5.push();
       p5.fill(r, g, b, a);
-      p5.stroke(255);
-      p5.strokeWeight(2);
+
       p5.circle(particle.x, particle.y, particle.size);
       p5.pop();
       particle.y += particle.velocity;
