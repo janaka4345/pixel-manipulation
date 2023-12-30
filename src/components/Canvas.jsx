@@ -63,8 +63,11 @@ function draw(p5) {
       p5.fill(255, 0, 0);
       p5.circle(particle.x, particle.y, particle.size);
       p5.pop();
-      particle.y > ch ? (particle.y = 0) : (particle.y += particle.velocity);
-      // particle.x = Math.random() * cw;
+      particle.y += particle.velocity;
+      if (particle.y > ch) {
+        particle.y = 0;
+        particle.x = Math.random() * cw;
+      }
     });
   };
 }
