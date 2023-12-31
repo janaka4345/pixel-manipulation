@@ -7,9 +7,8 @@ let cw = 400;
 let ch = 400;
 let particleArray = [];
 let numOfParticles = 500;
-let brightness = [];
 
-export default function Canvas4(props) {
+export default function Canvas3(props) {
   const [t, setT] = useState(0);
   useMemo(() => {
     for (let i = 0; i < numOfParticles; i++) {
@@ -22,9 +21,6 @@ export default function Canvas4(props) {
       });
     }
   }, []);
-  // useMemo(() => {
-
-  // }, []);
 
   return (
     <div>
@@ -54,26 +50,6 @@ function setup(p5) {
     p5.tint(255, 125);
     graphic.image(img2, 0, 0, 400, 400);
     graphic.loadPixels();
-    for (let y = 0; y < ch; y++) {
-      let row = [];
-      for (let x = 0; x < cw; x++) {
-        const index = (x + y * cw) * 4;
-        const r = graphic.pixels[index + 0];
-        const g = graphic.pixels[index + 1];
-        const b = graphic.pixels[index + 2];
-        const avg = (r + g + b) / 3;
-        row.push({
-          avg,
-          x,
-          y,
-          positionX: x,
-          positionY: y,
-          speedX: Math.random() * 3 - 1.5,
-          speedY: Math.random() * 3 - 1.5,
-        });
-      }
-      brightness.push(row);
-    }
   };
 }
 function preload(p5) {
@@ -84,37 +60,31 @@ function draw(p5) {
   return () => {
     // p5.image(img, 0, 0);
     p5.background(0);
-    // p5.image(graphic, 0, 0, 400, 400);
-    brightness.forEach((row) => {
-      row.forEach((pixel) => {
-        p5.push();
-        p5.fill(pixel.avg);
-        p5.noStroke();
-        p5.square(pixel.positionX, pixel.positionY, 1);
-        p5.pop();
-        pixel.positionX += pixel.speedX;
-        pixel.positionY += pixel.speedY;
-      });
+    p5.image(graphic, 0, 0, 400, 400);
+    particleArray.forEach((particle) => {
+      const index = (particle.x + particle.y * cw) * 4;
+      const r = graphic.pixels[index + 0];
+      const g = graphic.pixels[index + 1];
+      const b = graphic.pixels[index + 2];
+      const a = graphic.pixels[index + 3];
+
+      p5.push();
+      p5.fill(255);
+      p5.noStroke();
+      p5.square(particle.x, particle.y, particle.size);
+      p5.pop();
+      particle.y += particle.velocity;
+      if (particle.y > ch) {
+        particle.y = 0;
+        // particle.x = Math.floor(Math.random() * cw);
+      }
     });
-    // particleArray.forEach((particle) => {
-    //   p5.push();
-    //   p5.fill(255);
-    //   p5.noStroke();
-    //   p5.square(particle.x, particle.y, particle.size);
-    //   p5.pop();
-    //   particle.y += particle.velocity;
-    //   if (particle.y > ch) {
-    //     particle.y = 0;
-    //     // particle.x = Math.floor(Math.random() * cw);
-    //   }
-    // });
     // p5.noLoop();
     // p5.frameCount > 500 ? p5.noLoop() : null;
   };
 }
 function mousePressed(p5) {
   // console.log(particleArray);
-  console.log(p5.frameRate());
-  // console.log(brightness);
-  // console.log(graphic.pixels);
+  // console.log(p5.frameRate());
+  console.log(graphic.pixels);
 }
